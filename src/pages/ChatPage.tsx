@@ -6,7 +6,7 @@ import { PanelLeftClose, Menu } from "lucide-react";
 import Sidebar from "../components/chat/Sidebar";
 import ChatBox from "../components/chat/ChatBox";
 import { Button } from "../components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "../components/ui/sheet";
+import { Sheet, SheetContent } from "../components/ui/sheet";
 import {
   Tooltip,
   TooltipContent,

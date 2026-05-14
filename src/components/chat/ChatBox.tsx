@@ -19,7 +19,6 @@ import {
   BellOff,
   ChevronDown,
   Smile,
-  Plus,
   Sparkles,
   Pin,
   PinOff,
@@ -260,8 +259,6 @@ const ChatBox = ({ isSidebarOpen, onToggleSidebar }: ChatBoxProps) => {
       }, 400);
     }
   }, [reduxHighlightedId, messages]);
-
-  const commonEmojis = ["👍", "❤️", "😂", "😮", "😢", "🔥"];
 
   const scrollToBottom = () => {
     // A small timeout ensures the DOM has completely finished painting all message heights

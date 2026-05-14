@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import {
-  Loader2,
-  Eye,
-  EyeOff,
-  CheckCircle2,
-  AlertCircle,
-  AlertTriangleIcon,
-} from "lucide-react";
+import { Loader2, Eye, EyeOff, CheckCircle2, AlertCircle } from "lucide-react";
 import {
   useRegisterMutation,
   useLazyCheckUsernameQuery,
@@ -19,11 +12,7 @@ import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import Alert from "../ui/alert";
 
-interface RegisterProps {
-  onSwitch: () => void;
-}
-
-const Register = ({ onSwitch }: RegisterProps) => {
+const Register = () => {
   const [username, setUsername] = useState("");
   const [usernameStatus, setUsernameStatus] = useState<
     "idle" | "checking" | "available" | "taken"

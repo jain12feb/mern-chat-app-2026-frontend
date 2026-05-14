@@ -1,15 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  X,
-  Loader2,
-  Search,
-  Edit2,
-  LogOut,
-  ShieldAlert,
-  Users,
-  Plus,
-  Check,
-} from "lucide-react";
+import { X, Loader2, Plus, Edit2, ShieldAlert, LogOut } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { type RootState } from "../../store";
 import {
@@ -31,9 +21,8 @@ import {
 } from "../ui/dialog";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Badge } from "../ui/badge";
-import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback } from "../ui/avatar";
+import { Badge } from "../ui/badge";
 
 interface GroupSettingsModalProps {
   isOpen: boolean;
@@ -52,7 +41,7 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
   const [searchUsers, { data: searchResults, isFetching: searchLoading }] =
     useLazySearchUsersQuery();
   const [renameGroup, { isLoading: renameLoading }] = useRenameGroupMutation();
-  const [addToGroup, { isLoading: addLoading }] = useAddToGroupMutation();
+  const [addToGroup] = useAddToGroupMutation();
   const [removeFromGroup, { isLoading: removeLoading }] =
     useRemoveFromGroupMutation();
 
@@ -84,8 +73,8 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
         messageApi.util.updateQueryData(
           "fetchMessages",
           selectedChat._id,
-          (draft) => {
-            draft.push(message);
+          (draft: any) => {
+            draft.messages.push(message);
           },
         ) as any,
       );
@@ -113,8 +102,8 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
         messageApi.util.updateQueryData(
           "fetchMessages",
           selectedChat._id,
-          (draft) => {
-            draft.push(message);
+          (draft: any) => {
+            draft.messages.push(message);
           },
         ) as any,
       );
@@ -152,8 +141,8 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
           messageApi.util.updateQueryData(
             "fetchMessages",
             selectedChat._id,
-            (draft) => {
-              draft.push(message);
+            (draft: any) => {
+              draft.messages.push(message);
             },
           ) as any,
         );
@@ -177,7 +166,9 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
         {/* Header - Identical to Forward Modal */}
         <DialogHeader className="border-b border-gray-200 dark:border-zinc-800 pr-14 p-5">
           <DialogTitle>Group settings</DialogTitle>
-          <DialogDescription>Manage your group identity and members</DialogDescription>
+          <DialogDescription>
+            Manage your group identity and members
+          </DialogDescription>
         </DialogHeader>
 
         {/* Main Horizontal Content */}
@@ -228,42 +219,60 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
                 <div className="mt-3 flex-1 overflow-y-auto px-1 space-y-1">
                   {searchLoading ? (
                     <div className="flex justify-center py-6">
-                      <Loader2 className="animate-spin text-primary/40" size={24} />
+                      <Loader2
+                        className="animate-spin text-primary/40"
+                        size={24}
+                      />
                     </div>
-                  ) : searchResults?.filter((user: any) => !selectedChat.participants.some((p: any) => p._id === user._id)).length > 0 ? (
+                  ) : searchResults?.filter(
+                      (user: any) =>
+                        !selectedChat.participants.some(
+                          (p: any) => p._id === user._id,
+                        ),
+                    ).length > 0 ? (
                     searchResults
-                      .filter((user: any) => !selectedChat.participants.some((p: any) => p._id === user._id))
+                      .filter(
+                        (user: any) =>
+                          !selectedChat.participants.some(
+                            (p: any) => p._id === user._id,
+                          ),
+                      )
                       .slice(0, 8)
                       .map((user: any) => (
-                      <button
-                        key={user._id}
-                        onClick={() => handleAddUser(user)}
-                        className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-2xl text-left transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800 border border-transparent"
-                      >
-                        <div className="flex items-center gap-3 min-w-0">
-                          <Avatar className="w-10 h-10 ring-1 ring-border">
-                            <AvatarFallback className="bg-primary/10 text-primary font-bold">
-                              {user.username.charAt(0).toUpperCase()}
-                            </AvatarFallback>
-                          </Avatar>
-                          <div className="min-w-0">
-                            <p className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">
-                              {user.username}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                              {user.email}
-                            </p>
+                        <button
+                          key={user._id}
+                          onClick={() => handleAddUser(user)}
+                          className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-2xl text-left transition-colors hover:bg-gray-100 dark:hover:bg-zinc-800 border border-transparent"
+                        >
+                          <div className="flex items-center gap-3 min-w-0">
+                            <Avatar className="w-10 h-10 ring-1 ring-border">
+                              <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                                {user.username.charAt(0).toUpperCase()}
+                              </AvatarFallback>
+                            </Avatar>
+                            <div className="min-w-0">
+                              <p className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">
+                                {user.username}
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                                {user.email}
+                              </p>
+                            </div>
                           </div>
-                        </div>
-                        <div className="w-5 h-5 rounded-full border border-gray-300 dark:border-zinc-600 flex items-center justify-center group-hover:border-primary transition-colors">
-                          <Plus size={12} className="text-gray-400 group-hover:text-primary" />
-                        </div>
-                      </button>
-                    ))
-                  ) : search && (
-                    <p className="py-8 text-center text-xs text-gray-500 dark:text-gray-400">
-                      No users found
-                    </p>
+                          <div className="w-5 h-5 rounded-full border border-gray-300 dark:border-zinc-600 flex items-center justify-center group-hover:border-primary transition-colors">
+                            <Plus
+                              size={12}
+                              className="text-gray-400 group-hover:text-primary"
+                            />
+                          </div>
+                        </button>
+                      ))
+                  ) : (
+                    search && (
+                      <p className="py-8 text-center text-xs text-gray-500 dark:text-gray-400">
+                        No users found
+                      </p>
+                    )
                   )}
                 </div>
               </div>
@@ -272,59 +281,62 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
 
           {/* Right Side: Member List (Matches the list in Forward Modal) */}
           <div className="w-full sm:flex-[1.2] flex flex-col overflow-hidden">
-             <div className="px-5 py-3 border-b border-gray-100 dark:border-zinc-900/50 flex items-center justify-between">
-                <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
-                  {selectedChat.participants.length} Active members
-                </span>
-             </div>
-            
+            <div className="px-5 py-3 border-b border-gray-100 dark:border-zinc-900/50 flex items-center justify-between">
+              <span className="text-xs font-semibold text-gray-500 dark:text-gray-400">
+                {selectedChat.participants.length} Active members
+              </span>
+            </div>
+
             <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1">
-                {selectedChat.participants.map((u: any) => u && (
-                  <div
-                    key={u._id}
-                    className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-2xl text-left border border-transparent group hover:bg-gray-100 dark:hover:bg-zinc-800/50"
-                  >
-                    <div className="flex items-center gap-3 min-w-0">
-                      <div className="relative">
-                        <Avatar className="w-10 h-10 ring-1 ring-border">
-                          <AvatarFallback className="bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 font-bold">
-                            {u.username?.charAt(0).toUpperCase() || "?"}
-                          </AvatarFallback>
-                        </Avatar>
-                        {u._id === selectedChat.groupAdmin?._id && (
-                           <div className="absolute -top-1 -right-1 bg-primary p-1 rounded-full shadow-md border-2 border-white dark:border-zinc-950">
+              {selectedChat.participants.map(
+                (u: any) =>
+                  u && (
+                    <div
+                      key={u._id}
+                      className="w-full flex items-center justify-between gap-3 px-3 py-3 rounded-2xl text-left border border-transparent group hover:bg-gray-100 dark:hover:bg-zinc-800/50"
+                    >
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="relative">
+                          <Avatar className="w-10 h-10 ring-1 ring-border">
+                            <AvatarFallback className="bg-gray-100 dark:bg-zinc-800 text-gray-600 dark:text-gray-300 font-bold">
+                              {u.username?.charAt(0).toUpperCase() || "?"}
+                            </AvatarFallback>
+                          </Avatar>
+                          {u._id === selectedChat.groupAdmin?._id && (
+                            <div className="absolute -top-1 -right-1 bg-primary p-1 rounded-full shadow-md border-2 border-white dark:border-zinc-950">
                               <ShieldAlert size={10} className="text-white" />
-                           </div>
-                        )}
-                      </div>
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">
-                            {u.username}
-                          </p>
-                          {u._id === userInfo._id && (
-                            <Badge className="bg-primary/10 text-primary border-none text-[9px] font-black h-4 px-1.5 uppercase tracking-tighter">
-                              YOU
-                            </Badge>
+                            </div>
                           )}
                         </div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
-                          {u.email}
-                        </p>
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium text-gray-900 dark:text-gray-100 truncate text-sm">
+                              {u.username}
+                            </p>
+                            {u._id === userInfo._id && (
+                              <Badge className="bg-primary/10 text-primary border-none text-[9px] font-black h-4 px-1.5 uppercase tracking-tighter">
+                                YOU
+                              </Badge>
+                            )}
+                          </div>
+                          <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                            {u.email}
+                          </p>
+                        </div>
                       </div>
-                    </div>
 
-                    {isAdmin && u._id !== userInfo._id && (
-                      <button
-                        onClick={() => handleRemove(u)}
-                        disabled={removeLoading}
-                        className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
-                      >
-                        <X size={16} />
-                      </button>
-                    )}
-                  </div>
-                ))}
+                      {isAdmin && u._id !== userInfo._id && (
+                        <button
+                          onClick={() => handleRemove(u)}
+                          disabled={removeLoading}
+                          className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 rounded-lg opacity-0 group-hover:opacity-100 transition-all"
+                        >
+                          <X size={16} />
+                        </button>
+                      )}
+                    </div>
+                  ),
+              )}
             </div>
           </div>
         </div>
@@ -341,7 +353,7 @@ const GroupSettingsModal = ({ isOpen, onClose }: GroupSettingsModalProps) => {
             <LogOut size={16} className="mr-2" />
             Leave group
           </Button>
-          
+
           <div className="flex items-center gap-2">
             <button
               type="button"

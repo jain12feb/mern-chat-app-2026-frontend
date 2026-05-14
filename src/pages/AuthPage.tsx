@@ -34,11 +34,7 @@ const AuthPage = () => {
           </div>
 
           <div className="w-full">
-            {activeTab === "register" ? (
-              <Register onSwitch={() => setActiveTab("login")} />
-            ) : (
-              <Login onSwitch={() => setActiveTab("register")} />
-            )}
+            {activeTab === "register" ? <Register /> : <Login />}
           </div>
 
           <div className="text-center">

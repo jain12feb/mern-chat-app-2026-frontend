@@ -3,17 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { useLoginMutation } from "../../store/authApi";
 import { setCredentials } from "../../store/authSlice";
-import { Loader2, Eye, EyeOff, AlertCircle, X } from "lucide-react";
+import { Loader2, Eye, EyeOff } from "lucide-react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 import Alert from "../ui/alert";
 
-interface LoginProps {
-  onSwitch: () => void;
-}
-
-const Login = ({ onSwitch }: LoginProps) => {
+const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);

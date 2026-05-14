@@ -25,8 +25,7 @@ import {
   useGenerateAiImageMutation,
   useGetUploadUrlMutation,
 } from "../../store/messageApi";
-import { useDispatch, useSelector } from "react-redux";
-import { type RootState } from "../../store";
+import { useDispatch } from "react-redux";
 import { messageApi } from "../../store/messageApi";
 import { useSocket } from "../../context/SocketContext";
 import { chatApi } from "../../store/chatApi";
@@ -45,12 +44,12 @@ export default function AttachmentMenu({
 
   const [sendMediaMessage, { isLoading: mediaLoading }] =
     useSendMediaMessageMutation();
-  const [getUploadUrl, { isLoading: isUploading }] = useGetUploadUrlMutation();
+  const [getUploadUrl] = useGetUploadUrlMutation();
   const [generateAiImage] = useGenerateAiImageMutation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadType, setUploadType] = useState<"image" | "file" | null>(null);
 
-  const { userInfo } = useSelector((state: RootState) => state.auth);
+  // const { selectedChat } = useSelector((state: RootState) => state.chat);
   const { socket } = useSocket();
   const dispatch = useDispatch();
 

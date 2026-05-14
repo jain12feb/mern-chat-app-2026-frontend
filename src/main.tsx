@@ -7,7 +7,6 @@ import { WebRTCProvider } from "./context/WebRTCContext";
 import { ThemeProvider } from "./components/theme-provider";
 import "./index.css";
 import App from "./App.tsx";
-import { ConfirmDialogProvider as BaseConfirmDialogProvider } from "@omit/react-confirm-dialog";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

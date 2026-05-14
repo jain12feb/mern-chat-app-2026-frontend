@@ -13,7 +13,6 @@ import {
   Sparkles,
   Keyboard,
   Shield,
-  Palette,
   Trash2,
   AlertCircle,
   Loader2,

@@ -9,7 +9,7 @@ import ChatPage from "./pages/ChatPage";
 import { useSocket } from "./context/SocketContext";
 import { chatApi } from "./store/chatApi";
 
-import { Loader2, LogOut, User, Settings, Shield } from "lucide-react";
+import { Loader2, LogOut, User, Settings } from "lucide-react";
 import { Button } from "./components/ui/button";
 import { ThemeToggle } from "./components/theme-toggle";
 import {

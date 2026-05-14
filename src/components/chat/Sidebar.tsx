@@ -4,7 +4,6 @@ import {
   Loader2,
   MessageSquare,
   Plus,
-  X,
   Pin,
   PinOff,
   Folder,
@@ -31,22 +30,14 @@ import {
   useRemoveFromGroupMutation,
   chatApi,
 } from "../../store/chatApi";
-import {
-  useFetchMessagesQuery,
-  useSendMessageMutation,
-  useUpdateMessageMutation,
-  useDeleteMessageMutation,
-  useReactToMessageMutation,
-  useSearchMessagesQuery,
-} from "../../store/messageApi";
+import { useSearchMessagesQuery } from "../../store/messageApi";
 import { setSelectedChat, setHighlightedMessage } from "../../store/chatSlice";
 import { useSocket } from "../../context/SocketContext";
 import GroupChatModal from "./GroupChatModal";
-import ProfileModal from "./ProfileModal";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Badge } from "../ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback } from "../ui/avatar";
 import { ScrollArea } from "../ui/scroll-area";
 import {
   Sheet,
@@ -59,7 +50,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
   DropdownMenuSubTrigger,
@@ -81,7 +71,7 @@ const Sidebar = ({ isCollapsed = false }: { isCollapsed?: boolean }) => {
   const dispatch = useDispatch();
   const { onlineUsers } = useSocket();
 
-  const [isAnyChatSelected, setIsAnyChatSelected] = useState(false);
+  const [_, setIsAnyChatSelected] = useState(false);
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
   const [searchType, setSearchType] = useState<"users" | "messages">("users");
   const [currentFolder, setCurrentFolder] = useState("Inbox");
@@ -113,7 +103,7 @@ const Sidebar = ({ isCollapsed = false }: { isCollapsed?: boolean }) => {
     useFetchChatsQuery(undefined);
   const [searchUsers, { data: searchResults, isFetching: searchLoading }] =
     useLazySearchUsersQuery();
-  const [accessChat, { isLoading: accessLoading }] = useAccessChatMutation();
+  const [accessChat] = useAccessChatMutation();
   const [togglePinChat] = useTogglePinChatMutation();
   const [toggleMuteChat] = useToggleMuteChatMutation();
   const [moveToFolder] = useMoveToFolderMutation();
@@ -415,7 +405,7 @@ const Sidebar = ({ isCollapsed = false }: { isCollapsed?: boolean }) => {
                       >
                         <div className="relative">
                           <Avatar className="h-12 w-12">
-                            <AvatarFallback className="bg-gradient-to-tr from-primary to-primary/80 text-white font-bold text-lg">
+                            <AvatarFallback className="bg-linear-to-tr from-primary to-primary/80 text-white font-bold text-lg">
                               {user.username.charAt(0).toUpperCase()}
                             </AvatarFallback>
                           </Avatar>
@@ -584,15 +574,15 @@ const Sidebar = ({ isCollapsed = false }: { isCollapsed?: boolean }) => {
                         }`}
                         title={isCollapsed ? chatName : ""}
                       >
-                        <div className="relative flex-shrink-0">
+                        <div className="relative shrink-0">
                           <Avatar className="h-12 w-12 ring-2 ring-transparent transition-all">
                             <AvatarFallback
                               className={`font-bold text-lg transition-colors ${
                                 isSelected
                                   ? "bg-white text-primary"
                                   : chat.isGroupChat
-                                    ? "bg-gradient-to-tr from-indigo-500 to-purple-500 text-white"
-                                    : "bg-gradient-to-tr from-slate-200 to-slate-300 dark:from-zinc-700 dark:to-zinc-800 text-slate-600 dark:text-zinc-400"
+                                    ? "bg-linear-to-tr from-indigo-500 to-purple-500 text-white"
+                                    : "bg-linear-to-tr from-slate-200 to-slate-300 dark:from-zinc-700 dark:to-zinc-800 text-slate-600 dark:text-zinc-400"
                               }`}
                             >
                               {chatName.charAt(0).toUpperCase()}
@@ -962,7 +952,7 @@ const Sidebar = ({ isCollapsed = false }: { isCollapsed?: boolean }) => {
       {/* Delete Chat Confirmation Dialog */}
       <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <DialogContent className="max-w-[600px] p-0 overflow-hidden border-none shadow-2xl rounded-2xl">
-          <div className="bg-gradient-to-br from-red-50 to-white dark:from-red-950/20 dark:to-zinc-900 p-6">
+          <div className="bg-linear-to-br from-red-50 to-white dark:from-red-950/20 dark:to-zinc-900 p-6">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="w-16 h-16 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center mb-2 animate-bounce">
                 <Trash2 className="w-8 h-8 text-red-600 dark:text-red-500" />
@@ -1010,7 +1000,7 @@ const Sidebar = ({ isCollapsed = false }: { isCollapsed?: boolean }) => {
         onOpenChange={setIsLeaveGroupDialogOpen}
       >
         <DialogContent className="max-w-[400px] p-0 overflow-hidden border-none shadow-2xl rounded-2xl">
-          <div className="bg-gradient-to-br from-orange-50 to-white dark:from-orange-950/20 dark:to-zinc-900 p-6">
+          <div className="bg-linear-to-br from-orange-50 to-white dark:from-orange-950/20 dark:to-zinc-900 p-6">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/30 rounded-full flex items-center justify-center mb-2">
                 <CornerDownLeft className="w-8 h-8 text-orange-600 dark:text-orange-500" />
