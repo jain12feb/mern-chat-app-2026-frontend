@@ -26,7 +26,8 @@ import {
   Phone,
   Video,
 } from "lucide-react";
-import EmojiPicker, { Theme } from "emoji-picker-react";
+import React, { Suspense } from "react";
+const EmojiPicker = React.lazy(() => import("emoji-picker-react"));
 import { useTheme } from "next-themes";
 import {
   useDeleteMessageMutation,
@@ -1880,69 +1881,24 @@ const ChatBox = ({ isSidebarOpen, onToggleSidebar }: ChatBoxProps) => {
                                               <DropdownMenuSubContent
                                                 sideOffset={10}
                                               >
-                                                <EmojiPicker
-                                                  reactionsDefaultOpen
-                                                  theme={
-                                                    theme === "dark"
-                                                      ? Theme.DARK
-                                                      : Theme.LIGHT
-                                                  }
-                                                  onEmojiClick={(data) =>
-                                                    handleReact(
-                                                      msg._id,
-                                                      data.emoji,
-                                                    )
-                                                  }
-                                                  autoFocusSearch={false}
-                                                  previewConfig={{
-                                                    showPreview: false,
-                                                  }}
-                                                />
-                                                {/* <div className="flex flex-wrap gap-1 justify-between">
-                                          {commonEmojis.map((emoji) => (
-                                            <button
-                                              key={emoji}
-                                              onClick={() =>
-                                                handleReact(msg._id, emoji)
-                                              }
-                                              className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all hover:scale-110 text-xl"
-                                            >
-                                              {emoji}
-                                            </button>
-                                          ))}
-                                          <Popover>
-                                            <PopoverTrigger asChild>
-                                              <button className="p-2 hover:bg-gray-100 dark:hover:bg-zinc-700 rounded-xl transition-all hover:scale-110 text-muted-foreground flex items-center justify-center">
-                                                <Plus size={20} />
-                                              </button>
-                                            </PopoverTrigger>
-                                            <PopoverContent
-                                              className="p-0 border-none bg-transparent shadow-none"
-                                              side="right"
-                                              align="start"
-                                              sideOffset={10}
-                                            >
-                                              <EmojiPicker
-                                                reactionsDefaultOpen
-                                                theme={
-                                                  theme === "dark"
-                                                    ? Theme.DARK
-                                                    : Theme.LIGHT
-                                                }
-                                                onEmojiClick={(data) =>
-                                                  handleReact(
-                                                    msg._id,
-                                                    data.emoji,
-                                                  )
-                                                }
-                                                autoFocusSearch={false}
-                                                previewConfig={{
-                                                  showPreview: false,
-                                                }}
-                                              />
-                                            </PopoverContent>
-                                          </Popover>
-                                        </div> */}
+                                                  <Suspense fallback={<div className="p-4 text-center text-sm text-muted-foreground"><Loader2 className="h-4 w-4 animate-spin mx-auto"/></div>}>
+                                                    <EmojiPicker
+                                                      onEmojiClick={(data) =>
+                                                        handleReact(
+                                                          msg._id,
+                                                          data.emoji,
+                                                        )
+                                                      }
+                                                      theme={
+                                                        (theme === "dark"
+                                                          ? "dark"
+                                                          : "light") as any
+                                                      }
+                                                      lazyLoadEmojis={true}
+                                                      searchDisabled
+                                                      skinTonesDisabled
+                                                    />
+                                                  </Suspense>
                                               </DropdownMenuSubContent>
                                             </DropdownMenuSub>
                                           )}
@@ -2214,14 +2170,13 @@ const ChatBox = ({ isSidebarOpen, onToggleSidebar }: ChatBoxProps) => {
                   align="end"
                   side="top"
                 >
-                  <EmojiPicker
-                    theme={theme === "dark" ? Theme.DARK : Theme.LIGHT}
-                    onEmojiClick={handleEmojiClick}
-                    autoFocusSearch={false}
-                    previewConfig={{
-                      showPreview: false,
-                    }}
-                  />
+                  <Suspense fallback={<div className="h-[400px] flex items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary"/></div>}>
+                    <EmojiPicker
+                      onEmojiClick={handleEmojiClick}
+                      theme={(theme === "dark" ? "dark" : "light") as any}
+                      lazyLoadEmojis={true}
+                    />
+                  </Suspense>
                 </PopoverContent>
               </Popover>
             </div>

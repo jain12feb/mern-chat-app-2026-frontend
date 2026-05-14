@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { type RootState } from "./store";
 import { useRefreshMutation, useLogoutApiMutation } from "./store/authApi";
 import { setCredentials, logout } from "./store/authSlice";
-import AuthPage from "./pages/AuthPage";
-import ChatPage from "./pages/ChatPage";
+import React, { Suspense } from "react";
+const AuthPage = React.lazy(() => import("./pages/AuthPage"));
+const ChatPage = React.lazy(() => import("./pages/ChatPage"));
 import { useSocket } from "./context/SocketContext";
 import { chatApi } from "./store/chatApi";
 
@@ -23,9 +24,9 @@ import {
 import { Avatar, AvatarFallback } from "./components/ui/avatar";
 import { Toaster } from "./components/ui/sonner";
 import { TooltipProvider } from "./components/ui/tooltip";
-import ProfileModal from "./components/chat/ProfileModal";
-import UserSettingsModal from "./components/chat/UserSettingsModal";
-import CallManager from "./components/call/CallManager";
+const ProfileModal = React.lazy(() => import("./components/chat/ProfileModal"));
+const UserSettingsModal = React.lazy(() => import("./components/chat/UserSettingsModal"));
+const CallManager = React.lazy(() => import("./components/call/CallManager"));
 
 function AppContent() {
   const [isRefreshing, setIsRefreshing] = useState(true);
@@ -164,23 +165,31 @@ function AppContent() {
         </div>
       </header>
       <main className="flex-1 flex flex-col overflow-hidden">
-        <Routes>
-          <Route path="/" element={<AuthPage />} />
-          <Route path="/chat" element={<ChatPage />} />
-        </Routes>
+        <Suspense fallback={
+          <div className="h-full flex items-center justify-center">
+            <Loader2 className="animate-spin text-primary" size={40} />
+          </div>
+        }>
+          <Routes>
+            <Route path="/" element={<AuthPage />} />
+            <Route path="/chat" element={<ChatPage />} />
+          </Routes>
+        </Suspense>
       </main>
 
-      <ProfileModal
-        isOpen={isProfileOpen}
-        onClose={() => setIsProfileOpen(false)}
-      />
+      <Suspense fallback={null}>
+        <ProfileModal
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+        />
 
-      <UserSettingsModal
-        isOpen={isSettingsOpen}
-        onClose={() => setIsSettingsOpen(false)}
-      />
-      
-      <CallManager />
+        <UserSettingsModal
+          isOpen={isSettingsOpen}
+          onClose={() => setIsSettingsOpen(false)}
+        />
+        
+        <CallManager />
+      </Suspense>
     </div>
   );
 }
