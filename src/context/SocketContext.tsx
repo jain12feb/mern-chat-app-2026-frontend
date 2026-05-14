@@ -40,7 +40,8 @@ export const SocketProvider = ({ children }: { children: ReactNode }) => {
       return;
     }
 
-    const newSocket = io("http://localhost:5000", {
+    const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
+    const newSocket = io(backendUrl, {
       withCredentials: true, // Required to pass cookies if needed
     });
 

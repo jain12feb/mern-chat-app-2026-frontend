@@ -8,8 +8,9 @@ import {
 import { type RootState } from "./index";
 import { setCredentials, logout } from "./authSlice";
 
+const backendUrl = import.meta.env.VITE_API_URL || "http://localhost:5000";
 const baseQuery = fetchBaseQuery({
-  baseUrl: "http://localhost:5000/api",
+  baseUrl: `${backendUrl}/api`,
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
